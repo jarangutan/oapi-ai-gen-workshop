@@ -2,34 +2,32 @@ package server
 
 import (
 	"context"
-
-	"duck/internal/server/oapigen"
-	"duck/internal/service"
+	"fmt"
 )
 
-var _ oapigen.StrictServerInterface = (*Server)(nil)
+var _ StrictServerInterface = (*Server)(nil)
 
-type DuckService interface {
-	GetDuck(id int) service.RubberDuck
-	AddDuck(duck service.RubberDuck) error
+type DuckStore interface {
+	GetDucks(ctx context.Context) ([]RubberDuck, error)
+	CreateDuck(ctx context.Context, duck NewRubberDuck) error
 }
 
 type Server struct {
-	duckService DuckService
+	duckStore DuckStore
 }
 
-func NewServer(ds DuckService) *Server {
+func NewServer(ds DuckStore) *Server {
 	server := &Server{
-		duckService: ds,
+		duckStore: ds,
 	}
 
 	return server
 }
 
-func (s *Server) GetDucks(ctx context.Context, request oapigen.GetDucksRequestObject) (oapigen.GetDucksResponseObject, error) {
-	return nil, nil
+func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (GetDucksResponseObject, error) {
+	return nil, fmt.Errorf("NOT IMPLEMENTED")
 }
 
-func (s *Server) CreateDuck(ctx context.Context, request oapigen.CreateDuckRequestObject) (oapigen.CreateDuckResponseObject, error) {
-	return nil, nil
+func (s *Server) CreateDuck(ctx context.Context, request CreateDuckRequestObject) (CreateDuckResponseObject, error) {
+	return nil, fmt.Errorf("NOT IMPLEMENTED")
 }

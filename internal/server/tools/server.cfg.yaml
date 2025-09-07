@@ -1,8 +1,5 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
-package: oapigen
-# additional-imports:
-#   - package: oapigen-practice/internal/types
-#     alias: .
+package: server
 generate:
   chi-server: true
   embedded-spec: true
@@ -10,4 +7,4 @@ generate:
   # models: true
 compatibility:
   apply-chi-middleware-first-to-last: true
-output: ../oapigen/server.gen.go
+output: ../server.gen.go

@@ -1,0 +1,149 @@
+openapi: 3.0.3
+info:
+  title: Rubber Duck API
+  version: 1.0.0
+  description: An API for storing and retrieving Rubber Ducks.
+paths:
+  /ducks:
+    get:
+      summary: Retrieve all Rubber Ducks
+      operationId: getDucks
+      responses:
+        "200":
+          description: List of Rubber Ducks successfully retrieved.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/RubberDuck"
+              examples:
+                success:
+                  summary: Example response
+                  value:
+                    - id: 1
+                      name: Classic Yellow
+                      color: yellow
+                      size: medium
+                    - id: 2
+                      name: Pirate Duck
+                      color: black
+                      size: large
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                error:
+                  value:
+                    code: 500
+                    message: Unable to retrieve ducks.
+    post:
+      summary: Store a new Rubber Duck
+      operationId: createDuck
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewRubberDuck"
+            examples:
+              newDuck:
+                summary: Example request
+                value:
+                  name: Ninja Duck
+                  color: black
+                  size: small
+      responses:
+        "201":
+          description: Rubber Duck successfully created.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RubberDuck"
+              examples:
+                createdDuck:
+                  value:
+                    id: 3
+                    name: Ninja Duck
+                    color: black
+                    size: small
+        "400":
+          description: Invalid input provided.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                badRequest:
+                  value:
+                    code: 400
+                    message: "Duck size must be one of: small, medium, large."
+        "500":
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              examples:
+                error:
+                  value:
+                    code: 500
+                    message: Unable to store duck.
+components:
+  schemas:
+    RubberDuck:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: Classic Yellow
+        color:
+          type: string
+          example: yellow
+        size:
+          type: string
+          enum:
+            - small
+            - medium
+            - large
+          example: medium
+      required:
+        - id
+        - name
+        - color
+        - size
+    NewRubberDuck:
+      type: object
+      properties:
+        name:
+          type: string
+        color:
+          type: string
+        size:
+          type: string
+          enum:
+            - small
+            - medium
+            - large
+      required:
+        - name
+        - color
+        - size
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 400
+        message:
+          type: string
+          example: Invalid request.
+      required:
+        - code
+        - message

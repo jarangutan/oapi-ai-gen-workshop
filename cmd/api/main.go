@@ -2,36 +2,35 @@ package main
 
 import (
 	"context"
+	"flag"
 	"fmt"
 	"log"
 	"net/http"
 	"os/signal"
-	"strings"
 	"syscall"
 	"time"
 
 	"duck/internal/server"
+	"duck/internal/store"
 
-	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/v5"
 )
 
 func main() {
-	db := database.New()
+	port := flag.Int("port", 8080, "Port for test HTTP server")
+	flag.Parse()
 
+	db := store.NewInMemoryStore()
 	srv := server.NewServer(db)
-	// handler, _ := srv.Handler()
+
+	strictHandler := server.NewStrictHandler(srv, nil)
 
 	r := chi.NewRouter()
-	// srv.RegisterHandler(r)
-	// r.Route("/api", func(ar chi.Router) {
-	// 	srv.RegisterHandler(ar)
-	// })
-
-	const apiRoute = "/api/v0"
-	r.Mount(apiRoute, srv.Handler(apiRoute))
+	r.Use(server.WithSwaggerValidate())
+	server.HandlerFromMux(strictHandler, r)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", port),
+		Addr:         fmt.Sprintf(":%d", *port),
 		Handler:      r,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
@@ -41,19 +40,10 @@ func main() {
 	// Create a done channel to signal when the shutdown is complete
 	done := make(chan bool, 1)
 
-	walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
-		route = strings.Replace(route, "/*/", "/", -1)
-		fmt.Printf("%s %s\n", method, route)
-		return nil
-	}
-
-	if err := chi.Walk(r, walkFunc); err != nil {
-		fmt.Printf("Logging err: %s\n", err.Error())
-	}
-
 	// Run graceful shutdown in a separate goroutine
 	go gracefulShutdown(server, done)
 
+	fmt.Printf("Listening on http://localhost:%d\n", *port)
 	err := server.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		panic(fmt.Sprintf("http server error: %s", err))

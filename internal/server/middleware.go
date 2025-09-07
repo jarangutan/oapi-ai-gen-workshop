@@ -6,15 +6,13 @@ import (
 	"fmt"
 	"net/http"
 
-	"duck/internal/server/oapigen"
-
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
-// withSwaggerValidate will prevent bad requests that don't conform to our OpenAPI schema
+// WithSwaggerValidate will prevent bad requests that don't conform to our OpenAPI schema
 // from hitting our handlers
-func withSwaggerValidate(path string) func(http.Handler) http.Handler {
-	swagger, err := oapigen.GetSwagger()
+func WithSwaggerValidate() func(http.Handler) http.Handler {
+	swagger, err := GetSwagger()
 	if err != nil {
 		// This should never error
 		panic("there was an error getting the swagger")
@@ -29,9 +27,9 @@ func withSwaggerValidate(path string) func(http.Handler) http.Handler {
 		ErrorHandlerWithOpts: func(ctx context.Context, err error, w http.ResponseWriter, r *http.Request, opts middleware.ErrorHandlerOpts) {
 			w.WriteHeader(opts.StatusCode)
 			_ = json.NewEncoder(w).Encode(
-				oapigen.Error{
+				Error{
 					Code:    400,
-					Message: fmt.Sprint("bad request:", err),
+					Message: fmt.Sprint("bad request:", err.Error()),
 				},
 			)
 		},

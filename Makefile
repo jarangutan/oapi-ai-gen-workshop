@@ -50,12 +50,14 @@ watch:
 	@if command -v air > /dev/null; then \
             echo "Watching...";\
             air; \
+						make clean; \
         else \
             read -p "Go's 'air' is not installed on your machine. Do you want to install it? [Y/n] " choice; \
             if [ "$$choice" != "n" ] && [ "$$choice" != "N" ]; then \
                 go install github.com/air-verse/air@v1.62.0; \
                 echo "Watching...";\
                 air; \
+								make clean; \
             else \
                 echo "You chose not to install air. Exiting..."; \
                 exit 1; \

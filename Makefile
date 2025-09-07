@@ -64,4 +64,8 @@ watch:
             fi; \
         fi
 
+# Presentation
+presi-watch:
+	@PORT=5000 npx @marp-team/marp-cli@latest -s docs/
+
 .PHONY: all build run test clean watch

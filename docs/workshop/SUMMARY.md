@@ -2,4 +2,5 @@
 
 # User Guide
 
-- [Prerequisites](site/prerequisites.md)
+- [Prerequisites](./site/prerequisites.md)
+

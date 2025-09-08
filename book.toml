@@ -1,0 +1,8 @@
+[book]
+authors = ["Jarangutan"]
+language = "en"
+src = "docs/workshop"
+title = "workshop"
+
+[build]
+build-dir = "build"

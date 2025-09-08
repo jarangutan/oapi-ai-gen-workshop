@@ -2,7 +2,7 @@
 authors = ["Jarangutan"]
 language = "en"
 src = "docs/workshop"
-title = "workshop"
+title = "Building an API in Go using Copilot and CodeGen"
 
 [build]
 build-dir = "build"

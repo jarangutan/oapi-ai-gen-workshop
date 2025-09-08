@@ -1,22 +1,26 @@
 ---
-transition: fade 1s
+transition: fade
+colorPreset: dark
+class: invert
+_class: invert
+paginate: true
+_paginate: false
 ---
 
 # Building an API in Go using Copilot and Code Gen
+## ShellHacks 2025 
 
-Jose Aranguren, ![width:30px](https://github.githubassets.com/assets/GitHub-Mark-ea2971cee799.png)jarangutan
+Jose Aranguren, ![width:26px invert](https://raw.githubusercontent.com/gilbarbara/logos/refs/heads/main/logos/github-icon.svg) jarangutan
 
----
-
-# Agenda
-
-1. Introduction
-2. Overview
-3. What are APIs
-4. OpenAPI Schemas
-5. Getting started with Go
-6. Code Generators
-7. Lets make an API!
+<!-- # Agenda -->
+<!---->
+<!-- 1. Introduction -->
+<!-- 2. Overview -->
+<!-- 3. What are APIs -->
+<!-- 4. OpenAPI Schemas -->
+<!-- 5. Getting started with Go -->
+<!-- 6. Code Generators -->
+<!-- 7. Lets make an API! -->
 
 ---
 

@@ -54,6 +54,8 @@ func main() {
 	log.Println("Graceful shutdown complete.")
 }
 
+// gracefulShutdown listens for the a kill signal and an optional interrupt from the user
+// see https://victoriametrics.com/blog/go-graceful-shutdown/
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	// Create context that listens for the interrupt signal from the OS.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)

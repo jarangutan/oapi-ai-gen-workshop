@@ -66,6 +66,6 @@ watch:
 
 # Presentation
 presi-watch:
-	@PORT=5000 npx @marp-team/marp-cli@latest --html --template bespoke -s docs/
+	@npx @marp-team/marp-cli@latest --html --template bespoke -w docs/workshop/slides.md
 
-.PHONY: all build run test clean watch
+.PHONY: all build run test clean watch presi-watch

@@ -41,11 +41,17 @@ jobs:
         id: pages
         uses: actions/configure-pages@v5
       - name: Build with mdBook
-        run: mdbook build docs/site
+        run: mdbook build ./docs/workshop/ --dest-dir ./build
+      - name: Marb Build
+        uses: docker://marpteam/marp-cli:v4.2.3
+        with:
+          args: workshop --allow-local-files --html --template bespoke -o build/slides.html
+        env:
+          MARP_USER: root:root
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./book
+          path: ./build
 
   # Deployment job
   deploy:

@@ -9,9 +9,9 @@ import (
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
-// WithSwaggerValidate will prevent bad requests that don't conform to our OpenAPI schema
+// withSwaggerValidate will prevent bad requests that don't conform to our OpenAPI schema
 // from hitting our handlers
-func WithSwaggerValidate() func(http.Handler) http.Handler {
+func withSwaggerValidate() func(http.Handler) http.Handler {
 	swagger, err := GetSwagger()
 	if err != nil {
 		// This should never error

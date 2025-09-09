@@ -17,20 +17,18 @@ import (
 )
 
 func main() {
-	port := flag.Int("port", 8080, "Port for test HTTP server")
+	var port int
+	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
 	db := store.NewInMemoryStore()
 	srv := server.NewServer(db)
 
-	strictHandler := server.NewStrictHandler(srv, nil)
-
 	r := chi.NewRouter()
-	r.Use(server.WithSwaggerValidate())
-	server.HandlerFromMux(strictHandler, r)
+	srv.RegisterHandler(r)
 
 	server := &http.Server{
-		Addr:         fmt.Sprintf(":%d", *port),
+		Addr:         fmt.Sprintf(":%d", port),
 		Handler:      r,
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
@@ -43,7 +41,7 @@ func main() {
 	// Run graceful shutdown in a separate goroutine
 	go gracefulShutdown(server, done)
 
-	fmt.Printf("Listening on http://localhost:%d\n", *port)
+	fmt.Printf("Listening on http://localhost:%d\n", port)
 	err := server.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		panic(fmt.Sprintf("http server error: %s", err))

@@ -3,15 +3,27 @@ package server
 import (
 	"context"
 	"fmt"
+
+	"github.com/go-chi/chi/v5"
 )
 
+// Guarantees our Server adheres to the StrictServerInterface
+// see https://dev.to/kittipat1413/checking-if-a-type-satisfies-an-interface-in-go-432n
 var _ StrictServerInterface = (*Server)(nil)
 
+// DuckStore interface describes the methods needed by the Server
+//
+// Go idiom is to declare interfaces where they are used. If you repeat it a lot,
+//
+//	then consider exporting it or moving it to a neutral package
+//
+// See standard library io -> net -> net/http for an idea of exporting interfaces in practice
 type DuckStore interface {
 	GetDucks(ctx context.Context) ([]RubberDuck, error)
 	CreateDuck(ctx context.Context, duck NewRubberDuck) (RubberDuck, error)
 }
 
+// Server holds our handlers
 type Server struct {
 	duckStore DuckStore
 }
@@ -22,6 +34,13 @@ func NewServer(ds DuckStore) *Server {
 	}
 
 	return server
+}
+
+func (s *Server) RegisterHandler(r *chi.Mux) {
+	strictHandler := NewStrictHandler(s, nil)
+	r.Use(withSwaggerValidate())
+
+	HandlerFromMux(strictHandler, r)
 }
 
 func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (GetDucksResponseObject, error) {

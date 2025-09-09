@@ -1,4 +1,4 @@
-package server
+package api
 
 import (
 	"context"
@@ -26,6 +26,7 @@ func withSwaggerValidate() func(http.Handler) http.Handler {
 	f := middleware.OapiRequestValidatorWithOptions(swagger, &middleware.Options{
 		ErrorHandlerWithOpts: func(ctx context.Context, err error, w http.ResponseWriter, r *http.Request, opts middleware.ErrorHandlerOpts) {
 			w.WriteHeader(opts.StatusCode)
+			// Encode can fail but we control what is encoded so ignoring the error :-)
 			_ = json.NewEncoder(w).Encode(
 				Error{
 					Code:    400,
@@ -34,6 +35,7 @@ func withSwaggerValidate() func(http.Handler) http.Handler {
 			)
 		},
 	})
+	// Middleware pattern: https://www.alexedwards.net/blog/making-and-using-middleware
 	return func(next http.Handler) http.Handler {
 		return f(next)
 	}

@@ -4,46 +4,46 @@ import (
 	"context"
 	"sync"
 
-	"duck/internal/server"
+	"duck/internal/api"
 )
 
 // InMemoryStore stores rubber ducks in memory until the server shuts down
 // Ideally, you would create domain types and have store import them
 type InMemoryStore struct {
-	ducks map[int]server.RubberDuck
+	ducks map[int]api.RubberDuck
 	index int
 	mu    sync.RWMutex
 }
 
 func NewInMemoryStore() *InMemoryStore {
 	return &InMemoryStore{
-		ducks: make(map[int]server.RubberDuck),
+		ducks: make(map[int]api.RubberDuck),
 		mu:    sync.RWMutex{},
 	}
 }
 
-func (i *InMemoryStore) GetDucks(ctx context.Context) ([]server.RubberDuck, error) {
+func (i *InMemoryStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) {
 	i.mu.RLock()
 	defer i.mu.RUnlock()
 
-	d := []server.RubberDuck{}
+	d := []api.RubberDuck{}
 	for _, v := range i.ducks {
 		d = append(d, v)
 	}
 	return d, nil
 }
 
-func (i *InMemoryStore) CreateDuck(ctx context.Context, duck server.NewRubberDuck) (server.RubberDuck, error) {
+func (i *InMemoryStore) CreateDuck(ctx context.Context, duck api.NewRubberDuck) (api.RubberDuck, error) {
 	i.mu.Lock()
 	defer i.mu.Unlock()
 
 	i.index++
 	id := i.index
-	i.ducks[id] = server.RubberDuck{
+	i.ducks[id] = api.RubberDuck{
 		Id:    id,
 		Color: duck.Color,
 		Name:  duck.Name,
-		Size:  server.RubberDuckSize(duck.Size), // see https://go.dev/blog/constants#string-constants
+		Size:  api.RubberDuckSize(duck.Size), // see https://go.dev/blog/constants#string-constants
 	}
 
 	return i.ducks[id], nil

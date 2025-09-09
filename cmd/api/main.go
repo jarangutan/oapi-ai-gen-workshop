@@ -24,6 +24,8 @@ func main() {
 	db := store.NewInMemoryStore()
 	srv := api.NewServer(db)
 
+	// Chi is a lightweight router that works with the built in standard library http handlers
+	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
 	r := chi.NewRouter()
 	srv.RegisterHandler(r)
 

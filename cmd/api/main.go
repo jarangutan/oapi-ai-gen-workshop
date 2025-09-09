@@ -10,7 +10,7 @@ import (
 	"syscall"
 	"time"
 
-	"duck/internal/server"
+	"duck/internal/api"
 	"duck/internal/store"
 
 	"github.com/go-chi/chi/v5"
@@ -22,7 +22,7 @@ func main() {
 	flag.Parse()
 
 	db := store.NewInMemoryStore()
-	srv := server.NewServer(db)
+	srv := api.NewServer(db)
 
 	r := chi.NewRouter()
 	srv.RegisterHandler(r)

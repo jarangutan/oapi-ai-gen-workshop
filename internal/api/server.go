@@ -28,6 +28,7 @@ type Server struct {
 	duckStore DuckStore
 }
 
+// NewServer will load create a new Server struct loaded with the duck store
 func NewServer(ds DuckStore) *Server {
 	server := &Server{
 		duckStore: ds,
@@ -36,6 +37,8 @@ func NewServer(ds DuckStore) *Server {
 	return server
 }
 
+// RegisterHandler takes a mux and registers the server handlers onto it
+// The swagger validator is specific to this server so we load it here
 func (s *Server) RegisterHandler(r *chi.Mux) {
 	strictHandler := NewStrictHandler(s, nil)
 	r.Use(withSwaggerValidate())

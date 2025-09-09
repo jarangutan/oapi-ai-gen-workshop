@@ -1,9 +1,5 @@
-# Overview 
+# Overview
 
 # Overview
 
 - [Introduction](./site/prerequisites.md)
-
-# Fundamentals
-
-- 

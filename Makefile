@@ -1,4 +1,4 @@
-# Simple Makefile for a Go project
+# A little starter Makefile for Go :-)
 
 # Build the application
 all: build test

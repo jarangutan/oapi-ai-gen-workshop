@@ -9,11 +9,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-
-	"duck/internal/api"
-	"duck/internal/store"
-
-	"github.com/go-chi/chi/v5"
 )
 
 func main() {
@@ -21,26 +16,18 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
-	// This pattern here is called ["Dependency Injection"](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/dependency-injection), you'll see a lot of that in Go.
-	// The in memory store implements the DuckStore interface from the Server implicitly so it can be passed to NewServer.
-	// With this, we can feed NewServer a fake implementation in tests if we want to isolate behavior.
-	// But usually it's best to test with the [real things](https://testcontainers.com/) in Go.
-	db := store.NewInMemoryStore()
-	srv := api.NewServer(db)
+	// Instantiate a new in memory store to act as our data store
 
-	// Chi is a lightweight router (mux) that works with the built in standard library http handlers.
-	// It's got a lot of nice features and it's compatible with any tooling that works off the standard library like middlewares.
-	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
-	//
-	// NOTE! Chi ain't the fastest but don't look at benchmarks when picking your tools.
-	// The fastests libraries make a lot of tradeofs and most of the time, the speed increase isn't worth the pain.
-	r := chi.NewRouter()
-	srv.RegisterHandler(r)
+	// Make a server by calling api.NewServer with our db
+
+	// Create a new chi router/mux by calling chi.NewRouter()
+
+	// Call the RegisterHandler function with chi router to register our handler
 
 	// Our server that will listen on our port and use our mux to handle requests
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
-		Handler: r,
+		Handler: nil, // Put our router/mux here!
 		// Recommended timeouts from
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		ReadTimeout:  5 * time.Second,
@@ -66,7 +53,8 @@ func main() {
 	log.Println("Graceful shutdown complete.")
 }
 
-// gracefulShutdown listens for the a kill signal and an optional interrupt from the user.
+// This is a freebie! We'll walk this together
+// gracefulShutdown listens for the a kill signal and an optional interrupt from the user
 // see https://victoriametrics.com/blog/go-graceful-shutdown/
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	// Create context that listens for the interrupt signal from the OS.

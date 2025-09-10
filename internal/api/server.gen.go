@@ -57,7 +57,6 @@ type MiddlewareFunc func(http.Handler) http.Handler
 
 // GetDucks operation middleware
 func (siw *ServerInterfaceWrapper) GetDucks(w http.ResponseWriter, r *http.Request) {
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.GetDucks(w, r)
 	}))
@@ -71,7 +70,6 @@ func (siw *ServerInterfaceWrapper) GetDucks(w http.ResponseWriter, r *http.Reque
 
 // CreateDuck operation middleware
 func (siw *ServerInterfaceWrapper) CreateDuck(w http.ResponseWriter, r *http.Request) {
-
 	handler := http.Handler(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		siw.Handler.CreateDuck(w, r)
 	}))
@@ -206,8 +204,7 @@ func HandlerWithOptions(si ServerInterface, options ChiServerOptions) http.Handl
 	return r
 }
 
-type GetDucksRequestObject struct {
-}
+type GetDucksRequestObject struct{}
 
 type GetDucksResponseObject interface {
 	VisitGetDucksResponse(w http.ResponseWriter) error
@@ -276,8 +273,10 @@ type StrictServerInterface interface {
 	CreateDuck(ctx context.Context, request CreateDuckRequestObject) (CreateDuckResponseObject, error)
 }
 
-type StrictHandlerFunc = strictnethttp.StrictHTTPHandlerFunc
-type StrictMiddlewareFunc = strictnethttp.StrictHTTPMiddlewareFunc
+type (
+	StrictHandlerFunc    = strictnethttp.StrictHTTPHandlerFunc
+	StrictMiddlewareFunc = strictnethttp.StrictHTTPMiddlewareFunc
+)
 
 type StrictHTTPServerOptions struct {
 	RequestErrorHandlerFunc  func(w http.ResponseWriter, r *http.Request, err error)
@@ -362,7 +361,6 @@ func (sh *strictHandler) CreateDuck(w http.ResponseWriter, r *http.Request) {
 
 // Base64 encoded, gzipped, json marshaled Swagger object
 var swaggerSpec = []string{
-
 	"H4sIAAAAAAAC/7xWXU/jOhD9K9bc+xj1g4+XvHG5aFVphRCrfVghHtx4WgyO7bWddgvKf1+NnY+GBkQl",
 	"xFNDY8+cOefMKS9QmNIajTp4yF/AFw9Y8vh45Zxx9GCdseiCxPh1YQTSJ/7hpVUI+dlslkHYWYQcpA64",
 	"Rgd1BiV6z9fDo7DQG66kYA5/V+jDBLqbPjip11DXGdBL6VBAfpe69cXuu/Nm+YhFoEbXuL2tlkt0/1fF",
@@ -441,11 +439,11 @@ func GetSwagger() (swagger *openapi3.T, err error) {
 	var specData []byte
 	specData, err = rawSpec()
 	if err != nil {
-		return
+		return swagger, err
 	}
 	swagger, err = loader.LoadFromData(specData)
 	if err != nil {
-		return
+		return swagger, err
 	}
-	return
+	return swagger, err
 }

@@ -14,6 +14,8 @@ import (
 	"duck/internal/store"
 
 	"github.com/go-chi/chi/v5"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
 func main() {
@@ -21,8 +23,14 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
-	db := store.NewInMemoryStore()
-	srv := api.NewServer(db)
+	db, err := gorm.Open(sqlite.Open("duck.db"), &gorm.Config{})
+	if err != nil {
+		panic("failed to connect database")
+	}
+
+	sdb := store.NewSQLiteStore(db)
+	sdb.Migrate()
+	srv := api.NewServer(sdb)
 
 	// Chi is a lightweight router (mux) that works with the built in standard library http handlers
 	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
@@ -48,7 +56,7 @@ func main() {
 
 	log.Printf("Listening on http://localhost:%d\n", port)
 	// Run the server
-	err := server.ListenAndServe()
+	err = server.ListenAndServe()
 	if err != nil && err != http.ErrServerClosed {
 		panic(fmt.Sprintf("http server error: %s", err))
 	}

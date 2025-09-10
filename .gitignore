@@ -34,3 +34,9 @@ go.work.sum
 
 # mdbook
 build
+
+# marp output
+slides.html
+
+# gorm
+duck.db

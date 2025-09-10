@@ -12,23 +12,20 @@ import (
 var _ StrictServerInterface = (*Server)(nil)
 
 // DuckStore interface describes the methods needed by the Server
-//
 // Go idiom is to declare interfaces where they are used. If you repeat it a lot,
-//
-//	then consider exporting it or moving it to a neutral package
-//
+// then consider exporting it or moving it to a neutral package
 // See standard library io -> net -> net/http for an idea of exporting interfaces in practice
 type DuckStore interface {
 	GetDucks(ctx context.Context) ([]RubberDuck, error)
 	CreateDuck(ctx context.Context, duck NewRubberDuck) (RubberDuck, error)
 }
 
-// Server holds our handlers
+// Server holds our handlers and our duckStore as a dependency
 type Server struct {
 	duckStore DuckStore
 }
 
-// NewServer will load create a new Server struct loaded with the duck store
+// NewServer will create a new Server struct loaded with the duck store
 func NewServer(ds DuckStore) *Server {
 	server := &Server{
 		duckStore: ds,
@@ -38,7 +35,7 @@ func NewServer(ds DuckStore) *Server {
 }
 
 // RegisterHandler takes a mux and registers the server handlers onto it
-// The swagger validator is specific to this server so we load it here
+// The swagger (OpenAPI) validator is specific to this api so we load it here
 func (s *Server) RegisterHandler(r *chi.Mux) {
 	strictHandler := NewStrictHandler(s, nil)
 	r.Use(withSwaggerValidate())
@@ -46,6 +43,17 @@ func (s *Server) RegisterHandler(r *chi.Mux) {
 	HandlerFromMux(strictHandler, r)
 }
 
+// GetDucks here implements the interface method `GetDucks` from the StrictServerInterface
+// This looks very different from your usual Go handler which looks like:
+// `GetDucks(w http.ResponseWriter, r *http.Request)`
+//
+// In actuality, the handler still looks like the one above! But Oapi Codegen has changed the internals
+// of this handler function to wrap the GetDucks from your server passed in through the NewStrictHandler function.
+// By doing so, it can take care of giving you the request context as ctx, loading params and unmarshalling the request
+// body into the GetDucksRequestObject, and building a strict interface around the response so you can only
+// return types that this method expects you to return
+//
+// If you are curious, go to server.gen.go and do a search for "siw *ServerInterfaceWrapper"
 func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (GetDucksResponseObject, error) {
 	ducks, err := s.duckStore.GetDucks(ctx)
 	if err != nil {

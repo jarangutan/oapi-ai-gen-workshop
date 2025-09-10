@@ -2,14 +2,19 @@
 
 This is a workshop built for ShellHacks 2025
 
-- [Workshop Site](https://jarangutan.github.io/oapi-ai-gen-workshop)
 - [Presentation Slides](https://jarangutan.github.io/oapi-ai-gen-workshop/slides.html)
+- [Workshop Site](https://jarangutan.github.io/oapi-ai-gen-workshop)
 
-## Setup Instructions
+## Setup
 
-> We recommend using Go 1.24.2
+> We recommend using Go 1.24.2 or higher
 
 Clone this repo and install dependencies
+
+```bash
+git clone https://github.com/jarangutan/oapi-ai-gen-workshop.git
+go mod tidy
+```
 
 ## Good Reads
 

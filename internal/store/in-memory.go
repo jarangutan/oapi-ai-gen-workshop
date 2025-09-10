@@ -12,7 +12,7 @@ import (
 type InMemoryStore struct {
 	ducks map[int]api.RubberDuck
 	index int
-	mu    sync.RWMutex
+	mu    sync.RWMutex // https://gobyexample.com/mutexes
 }
 
 func NewInMemoryStore() *InMemoryStore {

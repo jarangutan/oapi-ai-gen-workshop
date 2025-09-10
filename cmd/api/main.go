@@ -21,18 +21,18 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
-	db := store.NewInMemoryStore()
-	srv := api.NewServer(db)
+	// Instantiate a new in memory store to act as our data store
 
-	// Chi is a lightweight router (mux) that works with the built in standard library http handlers
-	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
-	r := chi.NewRouter()
-	srv.RegisterHandler(r)
+	// Make a server by calling api.NewServer with our db
+
+	// Create a new chi router/mux by calling chi.NewRouter()
+
+	// Call the RegisterHandler function with chi router to register our handler
 
 	// Our server that will listen on our port and use our mux to handle requests
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
-		Handler: r,
+		Handler: nil, // Put our router/mux here!
 		// Recommended timeouts from
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		ReadTimeout:  5 * time.Second,
@@ -58,6 +58,7 @@ func main() {
 	log.Println("Graceful shutdown complete.")
 }
 
+// This is a freebie! We'll walk this together
 // gracefulShutdown listens for the a kill signal and an optional interrupt from the user
 // see https://victoriametrics.com/blog/go-graceful-shutdown/
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

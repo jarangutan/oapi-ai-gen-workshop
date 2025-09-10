@@ -7,74 +7,26 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-// Guarantees our Server adheres to the StrictServerInterface
-// see https://dev.to/kittipat1413/checking-if-a-type-satisfies-an-interface-in-go-432n
-var _ StrictServerInterface = (*Server)(nil)
+// We'll get to this later ;-)
+// var _ StrictServerInterface = (*Server)(nil)
 
-// DuckStore interface describes the methods needed by the Server
-// Go idiom is to declare interfaces where they are used. If you repeat it a lot,
-// then consider exporting it or moving it to a neutral package
-// See standard library io -> net -> net/http for an idea of exporting interfaces in practice
-type DuckStore interface {
-	GetDucks(ctx context.Context) ([]RubberDuck, error)
-	CreateDuck(ctx context.Context, duck NewRubberDuck) (RubberDuck, error)
-}
+// Define an interface that describes what
+// is needed by the server to interact with the database!
 
-// Server holds our handlers and our duckStore as a dependency
-type Server struct {
-	duckStore DuckStore
-}
+// Make a struct called Server that holds our duckStore
 
-// NewServer will create a new Server struct loaded with the duck store
-func NewServer(ds DuckStore) *Server {
-	server := &Server{
-		duckStore: ds,
-	}
+// Make a NewServer func to create a new Server struct loaded
+// with our duck store and return a pointer to this new server
 
-	return server
-}
-
+// This one is a freebie! Uncomment it out once you build your Server struct
 // RegisterHandler takes a mux and registers the server handlers onto it
 // The swagger (OpenAPI) validator is specific to this api so we load it here
-func (s *Server) RegisterHandler(r *chi.Mux) {
-	strictHandler := NewStrictHandler(s, nil)
-	r.Use(withSwaggerValidate())
+// func (s *Server) RegisterHandler(r *chi.Mux) {
+// 	strictHandler := NewStrictHandler(s, nil)
+// 	r.Use(withSwaggerValidate())
+// 	HandlerFromMux(strictHandler, r)
+// }
 
-	HandlerFromMux(strictHandler, r)
-}
-
-// GetDucks here implements the interface method `GetDucks` from the StrictServerInterface
-// This looks very different from your usual Go handler which looks like:
-// `GetDucks(w http.ResponseWriter, r *http.Request)`
-//
-// In actuality, the handler still looks like the one above! But Oapi Codegen has changed the internals
-// of this handler function to wrap the GetDucks from your server passed in through the NewStrictHandler function.
-// By doing so, it can take care of giving you the request context as ctx, loading params and unmarshalling the request
-// body into the GetDucksRequestObject, and building a strict interface around the response so you can only
-// return types that this method expects you to return
-//
-// If you are curious, go to server.gen.go and do a search for "siw *ServerInterfaceWrapper"
-func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (GetDucksResponseObject, error) {
-	ducks, err := s.duckStore.GetDucks(ctx)
-	if err != nil {
-		return GetDucks500JSONResponse{
-			Code:    500,
-			Message: fmt.Sprintf("failed to get ducks: %s", err),
-		}, nil
-	}
-	return GetDucks200JSONResponse(ducks), nil
-}
-
-func (s *Server) CreateDuck(ctx context.Context, request CreateDuckRequestObject) (CreateDuckResponseObject, error) {
-	body := *request.Body
-
-	duck, err := s.duckStore.CreateDuck(ctx, body)
-	if err != nil {
-		return CreateDuck500JSONResponse{
-			Code:    500,
-			Message: fmt.Sprintf("failed to get ducks: %s", err),
-		}, nil
-	}
-
-	return CreateDuck201JSONResponse(duck), nil
-}
+// Implement the strict handlers made by oapi codegen
+// The function signature will look something like this:
+// func (s *Server) GetSomething(ctx context.Context, request GetSomeObject) (GetSomeResponseObject, error)

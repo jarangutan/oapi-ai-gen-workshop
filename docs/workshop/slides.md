@@ -55,6 +55,16 @@ We are here to help! Raise your hand if you get stuck!
 
 ---
 
+## What are the prerequisites?
+
+Go 1.24+ and your favorite IDE
+
+That's it! You can build a lot with just Go
+
+If you need Go, head to <https://go.dev/doc/install> and install for your operating system
+
+---
+
 ## What we're going to do together
 
 - Use OpenAI to build us an OpenAPI spec
@@ -64,16 +74,6 @@ We are here to help! Raise your hand if you get stuck!
 - Run our API
 
 You'll be coding so get your IDE open!
-
----
-
-## What are the prerequisites?
-
-Go 1.24+ and your favorite IDE
-
-That's it! You can build a lot with just Go
-
-If you need Go, head to <https://go.dev/doc/install> and install for your operating system
 
 ---
 
@@ -88,6 +88,8 @@ OpenAPI is a formal standard for describing HTTP APIs
 <!--
 _footer: https://swagger.io/docs/specification/v3_0/basic-structure/
 -->
+
+In the real world, your users need to know what your API does and what it returns
 
 ```yaml
 openapi: 3.0.4

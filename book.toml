@@ -1,9 +1,0 @@
-## This file can be ignored as it is primarily for the presentation
-[book]
-authors = ["Jarangutan"]
-language = "en"
-src = "docs/workshop"
-title = "Building an API in Go using Copilot and CodeGen"
-
-[build]
-build-dir = "build"

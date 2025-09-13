@@ -11,6 +11,8 @@ _paginate: false
 footer: ShellHacks 2025
 -->
 
+TODO: Put the lil guy gopher somewhere in the powerpoint where it would be cutest
+
 # Building an API in Go using Copilot and Code Gen
 
 Jose Aranguren, ![width:26px invert](https://raw.githubusercontent.com/gilbarbara/logos/refs/heads/main/logos/github-icon.svg) jarangutan
@@ -57,11 +59,13 @@ We are here to help! Raise your hand if you get stuck!
 
 ## What are the prerequisites?
 
-Go 1.24+ and your favorite IDE
+Go 1.24+, git and your favorite IDE
 
 That's it! You can build a lot with just Go
 
+TODO: nicer
 If you need Go, head to <https://go.dev/doc/install> and install for your operating system
+If you need git, head to <https://git-scm.com/downloads> and install for your operating system
 
 ---
 
@@ -172,6 +176,8 @@ Programs start running in package main.
 
 -->
 
+TODO: Put gopher here or next slide
+
 Go is a programming language developed by Google that is simple, built for concurrency, and with a strong standard library
 
 ```go
@@ -201,6 +207,7 @@ That way, you can got something you can go back to when learning more later
 # Lets get Started :-)
 
 TODO: Nicer
+TODO: Mention if you get stuck or lost, that's ok, you will still have working code at the end. (main branch)
 Go to the project repo: qrco.de/shgows (link to the repo)
 
 ```bash
@@ -211,9 +218,12 @@ go mod tidy
 
 ---
 
-# You made it :-D
+# We made it :-D
 
 Awesome job!
+
+TODO:
+If you got stuck or couldn't finish, that's ok! commit your changes and checkout main and do a make watch or go run cmd/api/main.go
 
 ---
 
@@ -243,4 +253,4 @@ Go build!
 
 ---
 
-# Thank you
+# Thank you o/

@@ -83,13 +83,21 @@ No!
 
 OpenAPI is a formal standard for describing HTTP APIs
 
+<!--
+TODO: Clean up the text here and add more context in the slide itself :-)
+
+- In the real world, your users need to know what your API does and what it returns
+- Designing API first gets you thinking of what it is you are trying to do
+- You can hand this to your team members and they'll know what you're up to
+-->
+
 ---
 
 <!--
 _footer: https://swagger.io/docs/specification/v3_0/basic-structure/
 -->
 
-In the real world, your users need to know what your API does and what it returns
+## Example
 
 ```yaml
 openapi: 3.0.4
@@ -99,12 +107,12 @@ info:
   version: 0.1.9
 servers:
   - url: http://api.example.com/v1
-  - url: http://staging-api.example.com
 paths:
   /users:
     get:
       summary: Returns a list of users.
       description: Optional extended description in CommonMark or HTML.
+      operationId: getUsers
       responses:
         "200": # status code
           description: A JSON array of user names
@@ -124,7 +132,29 @@ paths:
 _footer: https://www.postman.com/what-is-an-api/
 -->
 
-> An API, which stands for application programming interface, is a set of protocols that enable different software components to communicate and transfer data.
+<!--
+TODO: Example of an interface
+Your website needs to talk to a database. You wouldn't want your website to talk to the database directly.
+An API sits between your Frontend and the database to facilitate them talking to each other. This API is where your "backend" starts
+
+An API isn't just an HTTP API, an interface for a library can also be an API.
+
+TODO: clean up definitions
+An API (Application Programming Interface) is a set of rules that lets different software programs communicate and exchange data.
+
+An API is a way for one piece of software to talk to another by following agreed-upon rules for sharing information.
+
+TODO:
+good sites
+https://github.com/resources/articles/software-development/what-is-an-api
+
+https://www.geeksforgeeks.org/software-testing/what-is-an-api/ (The picture is good so consider nabbing it)
+
+-->
+
+TODO:
+
+> APIs act as bridges between different pieces of software, enabling them to communicate, share data, and work together.
 
 ---
 
@@ -132,6 +162,14 @@ _footer: https://www.postman.com/what-is-an-api/
 
 <!--
 _footer: https://go.dev/ and https://gobyexample.com/hello-world
+-->
+
+<!--
+TODO: less jank
+Explain what the hek a package main is
+Normally you start you app with a main.go file with the package main as package main is what Go looks for to run your program
+Programs start running in package main.
+
 -->
 
 Go is a programming language developed by Google that is simple, built for concurrency, and with a strong standard library
@@ -150,6 +188,8 @@ func main() {
 
 # But I don't know Go :-(
 
+TODO: Don't actually use gobyexample but instead let them know this site exists. Maybe mention the keywords they can use to reference back to
+
 That's OK! While we are coding I will be referring to
 
 <https://gobyexample.com/>
@@ -159,6 +199,9 @@ That way, you can got something you can go back to when learning more later
 ---
 
 # Lets get Started :-)
+
+TODO: Nicer
+Go to the project repo: qrco.de/shgows (link to the repo)
 
 ```bash
 git clone https://github.com/jarangutan/oapi-ai-gen-workshop.git

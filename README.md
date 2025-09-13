@@ -2,7 +2,7 @@
 
 This is a workshop built for ShellHacks 2025
 
-- [Workshop Slides](https://jarangutan.github.io/oapi-ai-gen-workshop/slides.html)
+- [Workshop Slides](https://jarangutan.github.io/oapi-ai-gen-workshop)
 
 ## Setup
 

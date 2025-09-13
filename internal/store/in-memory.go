@@ -1,3 +1,15 @@
+// Package store provides different stores that implement the DuckStore interface
+//
+// NOTE! Unless you are building something stupid simple like this or a Proof of concept (POC),
+// NEVER COUPLE YOUR API TYPES TO YOUR DATABASE TYPES! We are breaking that rule for demonstrations only.
+//
+// Your database types seldom look like your API types in real apps so keep them separate even if they look very similar.
+// It will make it easier if you ever have to change your API to GRPC or have to release a v2 while keeping backwards compatibility.
+// A good [go proverb](https://go-proverbs.github.io/) to remember is "A little copying is better than a little dependency."
+//
+// If you're curious about this pattern of using interfaces to separate your store implementations,
+// look up the ["repository pattern"](https://threedots.tech/post/repository-pattern-in-go/).
+// You'll see folks call the package repo, storage, db, database, etc. Pick a name you like :-)
 package store
 
 import (

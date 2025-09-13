@@ -11,7 +11,7 @@ import (
 // see https://dev.to/kittipat1413/checking-if-a-type-satisfies-an-interface-in-go-432n
 var _ StrictServerInterface = (*Server)(nil)
 
-// DuckStore interface describes the methods needed by the Server
+// DuckStore interface describes the methods needed by the Server for a store
 // Go idiom is to declare interfaces where they are used. If you repeat it a lot,
 // then consider exporting it or moving it to a neutral package
 // See standard library io -> net -> net/http for an idea of exporting interfaces in practice
@@ -20,12 +20,12 @@ type DuckStore interface {
 	CreateDuck(ctx context.Context, duck NewRubberDuck) (RubberDuck, error)
 }
 
-// Server holds our handlers and our duckStore as a dependency
+// Server holds our handlers and our duckStore
 type Server struct {
 	duckStore DuckStore
 }
 
-// NewServer will create a new Server struct loaded with the duck store
+// NewServer will create a new Server struct loaded with a duck store that implements the DuckStore interfacce
 func NewServer(ds DuckStore) *Server {
 	server := &Server{
 		duckStore: ds,
@@ -36,6 +36,7 @@ func NewServer(ds DuckStore) *Server {
 
 // RegisterHandler takes a mux and registers the server handlers onto it
 // The swagger (OpenAPI) validator is specific to this api so we load it here
+// You can also add more handler specific middlewares here!
 func (s *Server) RegisterHandler(r *chi.Mux) {
 	strictHandler := NewStrictHandler(s, nil)
 	r.Use(withSwaggerValidate())
@@ -51,9 +52,11 @@ func (s *Server) RegisterHandler(r *chi.Mux) {
 // of this handler function to wrap the GetDucks from your server passed in through the NewStrictHandler function.
 // By doing so, it can take care of giving you the request context as ctx, loading params and unmarshalling the request
 // body into the GetDucksRequestObject, and building a strict interface around the response so you can only
-// return types that this method expects you to return
+// return types that this method expects you to return.
 //
-// If you are curious, go to server.gen.go and do a search for "siw *ServerInterfaceWrapper"
+// If you are curious, go to server.gen.go and do a search for "siw *ServerInterfaceWrapper" to see the wrapper in action
+//
+// If you want less magic, you can swap to the regular go handler interface also in server.gen.go (search for "type ServerInterface interface")
 func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (GetDucksResponseObject, error) {
 	ducks, err := s.duckStore.GetDucks(ctx)
 	if err != nil {

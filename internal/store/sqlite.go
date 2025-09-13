@@ -8,6 +8,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// RubberDuck here is our database model which looks very similar to our API model
+// That's usually not the case :-)
 type RubberDuck struct {
 	gorm.Model
 	Name  string `gorm:"not null"`
@@ -15,6 +17,13 @@ type RubberDuck struct {
 	Size  string `gorm:"not null"`
 }
 
+// SQLLiteStore implements DuckStore inteface for a sqllite3 database using GORM
+// ORMs or Object Relationship Mappers are a tricky subject in Go. They can be super helpful or extremely painful!
+// They're particularly notorious for obfuscating a lot of the database away with magic. For our example, that's fine.
+//
+// I tend to prefer something like [sqlc](https://github.com/sqlc-dev/sqlc) for simple
+// or [sqlBoiler](https://github.com/aarondl/sqlboiler) for more complex as these generate code and types from a SQL schema
+// similar to how we are doing with oapi-codegen for our API.
 type SQLLiteStore struct {
 	db *gorm.DB
 }
@@ -31,7 +40,22 @@ func (s *SQLLiteStore) Migrate() {
 }
 
 func (s *SQLLiteStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) {
-	return nil, nil
+	ducks, err := gorm.G[RubberDuck](s.db).Find(ctx)
+	if err != nil {
+		return []api.RubberDuck{}, err
+	}
+
+	d := make([]api.RubberDuck, 0, len(ducks))
+	for _, duck := range ducks {
+		d = append(d, api.RubberDuck{
+			Id:    int(duck.ID),
+			Name:  duck.Name,
+			Color: duck.Color,
+			Size:  api.RubberDuckSize(duck.Size),
+		})
+	}
+
+	return d, nil
 }
 
 func (s *SQLLiteStore) CreateDuck(ctx context.Context, duck api.NewRubberDuck) (api.RubberDuck, error) {
@@ -39,7 +63,7 @@ func (s *SQLLiteStore) CreateDuck(ctx context.Context, duck api.NewRubberDuck) (
 	result := gorm.WithResult()
 	err := gorm.G[RubberDuck](s.db, result).Create(ctx, &rb)
 	if err != nil {
-		return api.RubberDuck{}, nil
+		return api.RubberDuck{}, err
 	}
 
 	return api.RubberDuck{

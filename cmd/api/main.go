@@ -21,11 +21,19 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
+	// This pattern here is called ["Dependency Injection"](https://quii.gitbook.io/learn-go-with-tests/go-fundamentals/dependency-injection), you'll see a lot of that in Go.
+	// The in memory store implements the DuckStore interface from the Server implicitly so it can be passed to NewServer.
+	// With this, we can feed NewServer a fake implementation in tests if we want to isolate behavior.
+	// But usually it's best to test with the [real things](https://testcontainers.com/) in Go.
 	db := store.NewInMemoryStore()
 	srv := api.NewServer(db)
 
-	// Chi is a lightweight router (mux) that works with the built in standard library http handlers
+	// Chi is a lightweight router (mux) that works with the built in standard library http handlers.
+	// It's got a lot of nice features and it's compatible with any tooling that works off the standard library like middlewares.
 	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
+	//
+	// NOTE! Chi ain't the fastest but don't look at benchmarks when picking your tools.
+	// The fastests libraries make a lot of tradeofs and most of the time, the speed increase isn't worth the pain.
 	r := chi.NewRouter()
 	srv.RegisterHandler(r)
 
@@ -58,10 +66,12 @@ func main() {
 	log.Println("Graceful shutdown complete.")
 }
 
-// gracefulShutdown listens for the a kill signal and an optional interrupt from the user
+// gracefulShutdown listens for the a kill signal and an optional interrupt from the user.
 // see https://victoriametrics.com/blog/go-graceful-shutdown/
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	// Create context that listens for the interrupt signal from the OS.
+	// This is done by catching those signals and instead of performing the default exit action,
+	// we send a Done to the context to let the server know to start shutting down.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
@@ -69,10 +79,12 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	<-ctx.Done()
 
 	log.Println("shutting down gracefully, press Ctrl+C again to force")
-	stop() // Allow Ctrl+C to force shutdown
+	// Allow Ctrl+C to force shutdown by reseting the default behavior of those syscalls back to their original
+	// behavior i.e. exiting the program.
+	stop()
 
 	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
+	// the request it is currently handling.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := apiServer.Shutdown(ctx); err != nil {

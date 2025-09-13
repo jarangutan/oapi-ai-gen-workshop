@@ -48,6 +48,9 @@ jobs:
           args: docs/workshop/slides.md --allow-local-files --html --template bespoke -o build/index.html
         env:
           MARP_USER: root:root
+      - name: Copy assets
+        run: |
+          cp -r docs/workshop/assets build/
       - name: Setup Pages
         id: pages
         uses: actions/configure-pages@v5

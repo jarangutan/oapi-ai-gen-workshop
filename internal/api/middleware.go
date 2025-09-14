@@ -2,8 +2,6 @@ package api
 
 // This file is a freebie! We'll walk through it together
 
-/****
-
 import (
 	"context"
 	"encoding/json"
@@ -44,5 +42,3 @@ func withSwaggerValidate() func(http.Handler) http.Handler {
 		return f(next)
 	}
 }
-
-****/

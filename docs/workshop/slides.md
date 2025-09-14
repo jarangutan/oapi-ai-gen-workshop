@@ -274,6 +274,29 @@ curl --request GET \
 
 ---
 
+## Fancy tools to work with APIs
+
+---
+
+### Editors
+
+- Swagger Editor - <https://editor.swagger.io>
+- pb33f "The Doctor" - <https://pb33f.io/doctor>
+- Scalar Sandbox - <https://sandbox.scalar.com>
+
+---
+
+### API Client Tools
+
+- Scalar - <https://github.com/scalar/scalar>
+- Insomnia - <https://github.com/Kong/insomnia>
+- Bruno - <https://github.com/usebruno/bruno>
+- Hoppscotch - <https://github.com/hoppscotch/hoppscotch>
+- Postman - <https://www.postman.com/>
+- and more!
+
+---
+
 <style scoped>
 section {
   background-color: --bgColor-default;

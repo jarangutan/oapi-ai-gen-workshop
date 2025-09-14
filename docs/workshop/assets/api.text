@@ -1,0 +1,18 @@
+---
+config:
+  theme: dark
+  mirrorActors: false
+---
+
+%% Command to create rendered mermaid svg
+%% kroki convert docs/workshop/assets/api.text --type mermaid --format svg --out-file docs/workshop/assets/api.svg
+
+sequenceDiagram
+actor F as Frontend
+participant A as Rubber Duck API
+participant D as Rubber Duck Database
+
+    F->>+A: Request Ducks
+    A->>+D: `SELECT * FROM DUCKS`
+    D->>-A: Return all ducks
+    A->>-F: Respond w/ Ducks

@@ -11,8 +11,6 @@ _paginate: false
 footer: ShellHacks 2025
 -->
 
-TODO: Put the lil guy gopher somewhere in the powerpoint where it would be cutest
-
 # Building an API in Go using Copilot and Code Gen
 
 Jose Aranguren, ![width:26px invert](https://raw.githubusercontent.com/gilbarbara/logos/refs/heads/main/logos/github-icon.svg) jarangutan
@@ -59,21 +57,35 @@ We are here to help! Raise your hand if you get stuck!
 
 ## What are the prerequisites?
 
-Go 1.24+, git and your favorite IDE
+<!--
+- Give students a moment to install the tools
+- If no time, have students follow. Main has finished code
+
+-->
+
+<style scoped>
+section {
+  background-color: --bgColor-default;
+  background-image: url(./assets/gopher.png);
+  background-position: right 10% bottom 0%;
+  background-size: 40%;
+  background-repeat: no-repeat;
+}
+</style>
+
+- Go 1.24+ (<https://go.dev/doc/install>)
+- git (<https://git-scm.com/downloads>)
+- and your favorite IDE
 
 That's it! You can build a lot with just Go
-
-TODO: nicer
-If you need Go, head to <https://go.dev/doc/install> and install for your operating system
-If you need git, head to <https://git-scm.com/downloads> and install for your operating system
 
 ---
 
 ## What we're going to do together
 
 - Use OpenAI to build us an OpenAPI spec
-- Use Code Generation to build us an API
-- Learn some Go to code up some handlers
+- Use Code Generation with our spec to build us an API
+- Learn some Go to code up API request handlers
 - Build us a database
 - Run our API
 
@@ -85,15 +97,7 @@ You'll be coding so get your IDE open!
 
 No!
 
-OpenAPI is a formal standard for describing HTTP APIs
-
-<!--
-TODO: Clean up the text here and add more context in the slide itself :-)
-
-- In the real world, your users need to know what your API does and what it returns
-- Designing API first gets you thinking of what it is you are trying to do
-- You can hand this to your team members and they'll know what you're up to
--->
+OpenAPI (also called swagger) is a formal standard for describing HTTP APIs
 
 ---
 
@@ -130,35 +134,32 @@ paths:
 
 ---
 
-## But what is an API?
+## Why make an OpenAPI spec?
+
+- Explains to users what your API does and what it takes/returns
+- Unblocks your teammates by having them build clients/mocks off the spec
+- Unlocks the use of codegen tools to adhere to the spec
+- **Lets you design and iterate over the spec faster than writing code**
+
+---
+
+<style scoped>
+p:has(img) { text-align: center; }
+</style>
+
+## Hold on! What even is an API?
 
 <!--
-_footer: https://www.postman.com/what-is-an-api/
+_footer: https://github.com/resources/articles/software-development/what-is-an-api
 -->
 
 <!--
-TODO: Example of an interface
-Your website needs to talk to a database. You wouldn't want your website to talk to the database directly.
-An API sits between your Frontend and the database to facilitate them talking to each other. This API is where your "backend" starts
-
-An API isn't just an HTTP API, an interface for a library can also be an API.
-
-TODO: clean up definitions
-An API (Application Programming Interface) is a set of rules that lets different software programs communicate and exchange data.
-
-An API is a way for one piece of software to talk to another by following agreed-upon rules for sharing information.
-
-TODO:
-good sites
-https://github.com/resources/articles/software-development/what-is-an-api
-
-https://www.geeksforgeeks.org/software-testing/what-is-an-api/ (The picture is good so consider nabbing it)
-
+- An API isn't just an HTTP API, an interface for a library can also be an API.
 -->
 
-TODO:
+> [Application Programming Interface or APIs] act as bridges between different pieces of software, enabling them to communicate, share data, and work together.
 
-> APIs act as bridges between different pieces of software, enabling them to communicate, share data, and work together.
+![mermaid](./assets/api.svg)
 
 ---
 
@@ -169,14 +170,11 @@ _footer: https://go.dev/ and https://gobyexample.com/hello-world
 -->
 
 <!--
-TODO: less jank
-Explain what the hek a package main is
-Normally you start you app with a main.go file with the package main as package main is what Go looks for to run your program
-Programs start running in package main.
-
+- package main is the package that holds your runnable program
+- package main is special in that it cannot be imported and they must contain a main function
+- import is importing fmt from the standard library
+- func main() is the function that starts your program
 -->
-
-TODO: Put gopher here or next slide
 
 Go is a programming language developed by Google that is simple, built for concurrency, and with a strong standard library
 
@@ -192,11 +190,9 @@ func main() {
 
 ---
 
-# But I don't know Go :-(
+## But I don't know Go :-(
 
-TODO: Don't actually use gobyexample but instead let them know this site exists. Maybe mention the keywords they can use to reference back to
-
-That's OK! While we are coding I will be referring to
+That's OK! While we are coding, I will be referring to entries in
 
 <https://gobyexample.com/>
 
@@ -204,11 +200,35 @@ That way, you can got something you can go back to when learning more later
 
 ---
 
+<!--
+_footer: https://en.wikipedia.org/wiki/Code_generation
+-->
+
+# What are Code Generators?
+
+> In computing, code generation denotes software techniques or systems that generate executable code which may then be used independently of the generator system in a runtime environment.
+
+---
+
+<!--
+_footer: No need to waste money when you got perfectly awesome tools lying around
+-->
+
+## Are we using AI to generate the code?
+
+No :^)
+
+We'll be using [oapi-codegen](https://github.com/oapi-codegen/oapi-codegen) which is a tool that converts OpenAPI specs into idiomatic Go code
+
+---
+
+<!--
+_footer: NOTE! If you get stuck or lost, the main branch has the completed project for you to play with!
+-->
+
 # Lets get Started :-)
 
-TODO: Nicer
-TODO: Mention if you get stuck or lost, that's ok, you will still have working code at the end. (main branch)
-Go to the project repo: qrco.de/shgows (link to the repo)
+Go to the project repo: [qrco.de/shgows](https://qrco.de/shgows)
 
 ```bash
 git clone https://github.com/jarangutan/oapi-ai-gen-workshop.git
@@ -218,32 +238,61 @@ go mod tidy
 
 ---
 
+<style scoped>
+section {
+  background-color: --bgColor-default;
+  background-image: url(./assets/gopher_graduate.png);
+  background-position: right 10% bottom 0%;
+  background-size: 40%;
+  background-repeat: no-repeat;
+}
+
+pre {
+  display: inline-block;
+  font-size: 100%;
+  inline-size: 50%;
+}
+</style>
+
 # We made it :-D
 
 Awesome job!
 
-TODO:
-If you got stuck or couldn't finish, that's ok! commit your changes and checkout main and do a make watch or go run cmd/api/main.go
+If you got stuck or couldn't finish, that's OK!
+
+The main branch has all the working code
+
+```bash
+## To go from base to main
+## branch and run the API
+git add .
+git commit -m "phew!"
+git checkout main
+go run cmd/api/main.go
+```
 
 ---
 
 # What's next?
 
-Checkout the code in the main repo! There are tons of notes explaining bits and pieces of the code
+Checkout the code in the main repo! There are tons of notes explaining extra bits and pieces of the code
 
 There's also a version of this API that uses sqlite as a database with the same server we just built
 
-# But I want more
+---
+
+## But I want more
 
 - Read [Go's Standard Library](https://github.com/golang/go)
 - Read [Go's Blog](https://blog.golang.org/)
   - Specially on slices ([1](https://blog.golang.org/slices-intro), [2](ttps://blog.golang.org/slices) and [strings](https://blog.golang.org/strings)
+- Read [Effective Go](https://go.dev/doc/effective_go)
 - Read [Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests/)
 - Read others Go code on Github
 
 ---
 
-# Most importantly
+## Most importantly
 
 Go build!
 
@@ -254,3 +303,5 @@ Go build!
 ---
 
 # Thank you o/
+
+_Make yourself into a gopher with <https://gopherize.me/>_

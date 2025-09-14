@@ -238,6 +238,42 @@ go mod tidy
 
 ---
 
+## Running our API
+
+```bash
+## On Windows
+go run cmd/api/main.go
+
+## On Linux/Mac we can use make like how we use npm run
+make run
+```
+
+---
+
+## POST a Duck to our API
+
+```bash
+curl --request POST \
+  --url http://localhost:8080/ducks \
+  --header 'Content-Type: application/json' \
+  --data '{
+  "name": "Jake",
+  "color": "red",
+  "size": "medium"
+}'
+```
+
+---
+
+## GET all Ducks from our API
+
+```bash
+curl --request GET \
+  --url http://localhost:8080/ducks
+```
+
+---
+
 <style scoped>
 section {
   background-color: --bgColor-default;

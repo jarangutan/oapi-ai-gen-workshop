@@ -39,7 +39,7 @@ build
 slides.html
 
 # airs junk
-tmp/*
+tmp
 
 # gorm
 duck.db

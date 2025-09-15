@@ -62,7 +62,7 @@ func (s *Server) GetDucks(ctx context.Context, request GetDucksRequestObject) (G
 	if err != nil {
 		return GetDucks500JSONResponse{
 			Code:    500,
-			Message: fmt.Sprintf("failed to get ducks: %s", err),
+			Message: fmt.Sprintf("failed to get ducks: %s", err), // in prod, don't ever let a user get your internal erros :^)
 		}, nil
 	}
 	return GetDucks200JSONResponse(ducks), nil

@@ -45,11 +45,10 @@ I like:
 
 ## The team
 
-TODO: Fix names woops
-
 - Yasmine Abdrabo
-- William Penneker
-- Fabiana Lincon TODO: Fix
+- William Pennebaker
+- Fabiana Fernandez Licon
+- Yohan Santos
 
 We are here to help! Raise your hand if you get stuck!
 

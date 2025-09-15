@@ -22,10 +22,14 @@ func main() {
 	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
 	flag.Parse()
 
-	// A Mux is an HTTP Multiplexer. See: https://pkg.go.dev/net/http#ServeMux
+	// A Mux is an HTTP Multiplexer.
+	// It matches the URL of each incoming request against a list 
+	// of registered patterns and calls the handler for the pattern 
+	// that most closely matches the URL.
+	// See: https://pkg.go.dev/net/http#ServeMux
 	mux := http.NewServeMux()
 
-	// We create a handler that will act when someone calls GET /duck
+	// We create a handler that will be called when someone calls GET /duck
 	mux.HandleFunc("GET /duck", func(w http.ResponseWriter, r *http.Request) {
 		// Set the content type so our caller knows what we are responding with
 		w.Header().Set("Content-Type", "application/json")

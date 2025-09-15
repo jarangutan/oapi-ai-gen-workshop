@@ -21,11 +21,11 @@ func main() {
 
 	// Loops
 	for i := 0; i <= 2; i++ {
-		fmt.Println("for loop", i) // for loop 0 -> for loop 3
+		fmt.Println("for loop", i) // for loop 0 -> for loop 2
 	}
 
 	for i := range 2 {
-		fmt.Println("range loop", i) // range loop 0 -> range loop 3
+		fmt.Println("range loop", i) // range loop 0 -> range loop 1
 	}
 
 	// if/else if/else
@@ -80,11 +80,25 @@ func main() {
 	delete(myMap, "k1")
 	fmt.Println("myMap", myMap) // myMap map[k2:2]
 
+	// structs
+	// are typed collections of fields useful for grouping data together into records
+	type gopher struct {
+		name   string
+		isCute bool
+	}
+
+	myGopher := gopher{
+		name:   "Gopherina",
+		isCute: true,
+	}
+	fmt.Println("myGopher", myGopher) // myGopher {Gopherina true}
+
 	// funcs
-	answer := plus(1, 2)
+	answer := Plus(1, 2)
 	fmt.Println("answer", answer) // 3
 }
 
-func plus(a, b int) int {
+// Capitalizing the first letter makes this public so other packages can use Plus
+func Plus(a, b int) int {
 	return a + b
 }

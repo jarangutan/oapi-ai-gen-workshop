@@ -195,7 +195,7 @@ That's OK! While we are coding, I will be referring to entries in
 
 <https://gobyexample.com/>
 
-That way, you got something you can go back to when learning more later
+That way, you get something you can go back to when learning more later
 
 ---
 

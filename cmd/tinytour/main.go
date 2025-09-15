@@ -98,7 +98,11 @@ func main() {
 	fmt.Println("answer", answer) // 3
 }
 
+// Plus takes a and b and returns the sum
+// Adding comments above things turns the comment into documentation. see https://tip.golang.org/doc/comment
+//
 // Capitalizing the first letter makes this public so other packages can use Plus
+// NOTE! You can't export anything from package main so move Plus to a different package if you want to export it
 func Plus(a, b int) int {
 	return a + b
 }

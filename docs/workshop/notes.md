@@ -141,10 +141,6 @@ paths:
 
 ---
 
-<style scoped>
-p:has(img) { text-align: center; }
-</style>
-
 ## Hold on! What even is an API?
 
 <!--

@@ -36,7 +36,8 @@ go.work.sum
 build
 
 # marp output
-slides.html
+notes.html
+
 
 # airs junk
 tmp

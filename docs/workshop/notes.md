@@ -12,6 +12,10 @@ style: |
   }
 ---
 
+[view me as a page!](https://jarangutan.github.io/oapi-ai-gen-workshop)
+
+---
+
 <!--
 footer: ShellHacks 2025
 -->

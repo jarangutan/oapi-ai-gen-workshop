@@ -47,6 +47,6 @@ watch:
 
 # Presentation
 presi-watch:
-	@npx @marp-team/marp-cli@latest --html --template bespoke -w docs/workshop/slides.md
+	@npx @marp-team/marp-cli@latest --html --allow-local-files --template bespoke -w docs/workshop/notes.md
 
 .PHONY: all build run test clean watch presi-watch

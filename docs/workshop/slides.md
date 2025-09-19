@@ -2,9 +2,14 @@
 transition: fade
 colorPreset: dark
 class: invert
-_class: invert
 paginate: true
-_paginate: false
+style: |
+  section.smallpre {
+    pre { display: inline-block; font-size: 100%; inline-size: 50%;}
+  }
+  section.centerimg { 
+    p:has(img) { text-align: center; }
+  }
 ---
 
 <!--
@@ -13,7 +18,7 @@ footer: ShellHacks 2025
 
 # Building an API in Go using Copilot and Code Gen
 
-Jose Aranguren, ![width:26px invert](https://raw.githubusercontent.com/gilbarbara/logos/refs/heads/main/logos/github-icon.svg) jarangutan
+<img src="https://raw.githubusercontent.com/gilbarbara/logos/refs/heads/main/logos/github-icon.svg" width="26" style="filter: invert(1);"> jarangutan
 
 <!-- # Agenda
 1. Introduction
@@ -27,7 +32,11 @@ Jose Aranguren, ![width:26px invert](https://raw.githubusercontent.com/gilbarbar
 
 ---
 
-![bg right:50%](./assets/chester.png)
+<!--
+_backgroundImage: url("./assets/chester.png")
+_backgroundPosition: right
+_backgroundSize: 50%
+-->
 
 ## whoami
 
@@ -43,34 +52,20 @@ I like:
 
 ---
 
-## The team
-
-- Yasmine Abdrabo
-- William Pennebaker
-- Fabiana Fernandez Licon
-- Yohan Santos
-
-We are here to help! Raise your hand if you get stuck!
-
----
-
 ## What are the prerequisites?
+
+<!--
+_backgroundColor: --bgColor-default
+_backgroundImage: url(./assets/gopher.png);
+_backgroundPosition: right 10% bottom 0%;
+_backgroundSize: 40%;
+_backgroundRepeat: no-repeat;
+-->
 
 <!--
 - Give students a moment to install the tools
 - If no time, have students follow. Main has finished code
-
 -->
-
-<style scoped>
-section {
-  background-color: --bgColor-default;
-  background-image: url(./assets/gopher.png);
-  background-position: right 10% bottom 0%;
-  background-size: 40%;
-  background-repeat: no-repeat;
-}
-</style>
 
 - Go 1.24+ (<https://go.dev/doc/install>)
 - git (<https://git-scm.com/downloads>)
@@ -150,6 +145,7 @@ p:has(img) { text-align: center; }
 
 <!--
 _footer: https://github.com/resources/articles/software-development/what-is-an-api
+_class: invert centerimg
 -->
 
 <!--
@@ -237,6 +233,18 @@ go mod tidy
 
 ---
 
+## Generating Code
+
+```bash
+## run all generators in the go module
+go generate ./...
+
+## On Linux/Mac, Makefile has a handy shortcut
+make gen
+```
+
+---
+
 ## Running our API
 
 ```bash
@@ -296,21 +304,13 @@ curl --request GET \
 
 ---
 
-<style scoped>
-section {
-  background-color: --bgColor-default;
-  background-image: url(./assets/gopher_graduate.png);
-  background-position: right 10% bottom 0%;
-  background-size: 40%;
-  background-repeat: no-repeat;
-}
-
-pre {
-  display: inline-block;
-  font-size: 100%;
-  inline-size: 50%;
-}
-</style>
+<!--
+_backgroundImage: url(./assets/gopher_graduate.png);
+_backgroundPosition: right 10% bottom 0%;
+_backgroundSize: 40%;
+_backgroundRepeat: no-repeat;
+_class: invert smallpre
+-->
 
 # We made it :-D
 

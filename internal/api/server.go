@@ -11,7 +11,7 @@ import (
 var _ StrictServerInterface = (*Server)(nil)
 
 // Define an interface that describes what
-// is needed by the server to interact with the database!
+// is needed by the server to interact with the database
 
 // Make a struct called Server that holds our duckStore
 

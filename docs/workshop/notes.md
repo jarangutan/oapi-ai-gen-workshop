@@ -73,6 +73,7 @@ _backgroundRepeat: no-repeat;
 
 - Go 1.24+ (<https://go.dev/doc/install>)
 - git (<https://git-scm.com/downloads>)
+- this repo: <https://qrco.de/shgows>
 - and your favorite IDE
 
 That's it! You can build a lot with just Go

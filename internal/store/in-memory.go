@@ -21,14 +21,16 @@ import (
 	"duck/internal/api"
 )
 
-// InMemoryStore stores rubber ducks in memory until the server shuts down
-// Ideally, you would create domain types and have store import them
+// InMemoryStore will store our rubber ducks in memory until the server shuts down
+// We will need a map, an index we can increment as a primary key,
+// and a Read Write mutex for concurrent access
 type InMemoryStore struct {
 	ducks map[uint]api.RubberDuck
 	index uint
 	mu    sync.RWMutex // https://gobyexample.com/mutexes
 }
 
+// Same as NewServer, we need to create a function that returns us a new InMemoryStore
 func NewInMemoryStore() *InMemoryStore {
 	return &InMemoryStore{
 		ducks: make(map[uint]api.RubberDuck),
@@ -36,8 +38,7 @@ func NewInMemoryStore() *InMemoryStore {
 	}
 }
 
-
-// These methods on the InMemoryStore struct that implements the 
+// We will fill in methods on our InMemoryStore struct that implements the 
 // DuckStore interface from our api.
 // 
 // Why not declare the interface here?

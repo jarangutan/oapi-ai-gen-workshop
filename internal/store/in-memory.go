@@ -13,7 +13,9 @@
 package store
 
 import (
+	"cmp"
 	"context"
+	"slices"
 	"sync"
 
 	"duck/internal/api"
@@ -42,6 +44,11 @@ func (i *InMemoryStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) 
 	for _, v := range i.ducks {
 		d = append(d, v)
 	}
+
+	slices.SortFunc(d, func(a,b api.RubberDuck) int {
+		return cmp.Compare(a.Id, b.Id)
+	})
+
 	return d, nil
 }
 

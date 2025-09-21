@@ -22,14 +22,14 @@ import (
 // InMemoryStore stores rubber ducks in memory until the server shuts down
 // Ideally, you would create domain types and have store import them
 type InMemoryStore struct {
-	ducks map[int]api.RubberDuck
-	index int
+	ducks map[uint]api.RubberDuck
+	index uint
 	mu    sync.RWMutex // https://gobyexample.com/mutexes
 }
 
 func NewInMemoryStore() *InMemoryStore {
 	return &InMemoryStore{
-		ducks: make(map[int]api.RubberDuck),
+		ducks: make(map[uint]api.RubberDuck),
 		mu:    sync.RWMutex{},
 	}
 }
@@ -38,7 +38,7 @@ func (i *InMemoryStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) 
 	i.mu.RLock()
 	defer i.mu.RUnlock()
 
-	d := []api.RubberDuck{}
+	d := make([]api.RubberDuck, 0, len(i.ducks))
 	for _, v := range i.ducks {
 		d = append(d, v)
 	}
@@ -52,7 +52,7 @@ func (i *InMemoryStore) CreateDuck(ctx context.Context, duck api.NewRubberDuck) 
 	i.index++
 	id := i.index
 	i.ducks[id] = api.RubberDuck{
-		Id:    id,
+		Id:    int(id),
 		Color: duck.Color,
 		Name:  duck.Name,
 		Size:  api.RubberDuckSize(duck.Size), // see https://go.dev/blog/constants#string-constants

@@ -1,4 +1,9 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+#
+# https://github.com/oapi-codegen/oapi-codegen
+# This file holds our configuration to have oapi-codegen create our types
+# This is split up to make it easier to read the types but you can delete this
+# and uncomment the `models: true` in server.cfg.yaml if you want it all in one single file
 package: api
 generate:
   models: true

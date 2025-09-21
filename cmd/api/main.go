@@ -34,13 +34,13 @@ func main() {
 	//
 	// NOTE! Chi ain't the fastest but don't look at benchmarks when picking your tools.
 	// The fastests libraries make a lot of tradeofs and most of the time, the speed increase isn't worth the pain.
-	r := chi.NewRouter()
-	srv.RegisterHandler(r)
+	mux := chi.NewRouter()
+	srv.RegisterHandler(mux)
 
 	// Our server that will listen on our port and use our mux to handle requests
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
-		Handler: r,
+		Handler: mux,
 		// Recommended timeouts from
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		ReadTimeout:  5 * time.Second,

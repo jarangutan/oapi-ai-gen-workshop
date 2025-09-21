@@ -9,6 +9,7 @@ import (
 	"time"
 )
 
+// Duck - https://go.dev/wiki/Well-known-struct-tags
 type Duck struct {
 	Color string `json:"color"`
 	ID    int    `json:"id"`
@@ -23,8 +24,8 @@ func main() {
 	flag.Parse()
 
 	// A Mux is an HTTP Multiplexer.
-	// It matches the URL of each incoming request against a list 
-	// of registered patterns and calls the handler for the pattern 
+	// It matches the URL of each incoming request against a list
+	// of registered patterns and calls the handler for the pattern
 	// that most closely matches the URL.
 	// See: https://pkg.go.dev/net/http#ServeMux
 	mux := http.NewServeMux()

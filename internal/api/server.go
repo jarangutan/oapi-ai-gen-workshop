@@ -37,11 +37,11 @@ func NewServer(ds DuckStore) *Server {
 // RegisterHandler takes a mux and registers the server handlers onto it
 // The swagger (OpenAPI) validator is specific to this api so we load it here
 // You can also add more handler specific middlewares here!
-func (s *Server) RegisterHandler(r *chi.Mux) {
+func (s *Server) RegisterHandler(mux *chi.Mux) {
 	strictHandler := NewStrictHandler(s, nil)
-	r.Use(withSwaggerValidate())
+	mux.Use(withSwaggerValidate())
 
-	HandlerFromMux(strictHandler, r)
+	HandlerFromMux(strictHandler, mux)
 }
 
 // GetDucks here implements the interface method `GetDucks` from the StrictServerInterface

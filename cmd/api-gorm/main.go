@@ -34,13 +34,13 @@ func main() {
 
 	// Chi is a lightweight router (mux) that works with the built in standard library http handlers
 	// To learn more on handlers and muxes, see: https://www.alexedwards.net/blog/an-introduction-to-handlers-and-servemuxes-in-go
-	r := chi.NewRouter()
-	srv.RegisterHandler(r)
+	mux := chi.NewRouter()
+	srv.RegisterHandler(mux)
 
 	// Our server that will listen on our port and use our mux to handle requests
 	server := &http.Server{
 		Addr:    fmt.Sprintf(":%d", port),
-		Handler: r,
+		Handler: mux,
 		// Recommended timeouts from
 		// https://blog.cloudflare.com/exposing-go-on-the-internet/
 		ReadTimeout:  5 * time.Second,

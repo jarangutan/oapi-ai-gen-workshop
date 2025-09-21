@@ -72,6 +72,8 @@ func main() {
 	// - if appending to a slice exceeds capacity, the slice is copied to another slice with double the capacity
 	mySlice3 := make([]int, 5, 10)
 	fmt.Println(mySlice3) // [0 0 0 0 0]
+	mySlice3 = append(mySlice3, 1, 2, 3, 4, 5, 6)
+	fmt.Println(mySlice3) // [0 0 0 0 0, 1, 2, 3, 4, 5, 6]
 
 	// maps
 	myMap := make(map[string]int) // or myMap := map[string]int{"k1": 1, "K2": 2}

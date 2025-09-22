@@ -228,6 +228,7 @@ Go to the project repo: [qrco.de/shgows](https://qrco.de/shgows)
 
 ```bash
 git clone https://github.com/jarangutan/oapi-ai-gen-workshop.git
+cd oapi-ai-gen-workshop
 git checkout base
 go mod tidy
 ```

@@ -12,6 +12,7 @@ Clone this repo, start in the base branch, and install dependencies
 
 ```bash
 git clone https://github.com/jarangutan/oapi-ai-gen-workshop.git
+cd oapi-ai-gen-workshop
 git checkout base
 go mod tidy
 ```

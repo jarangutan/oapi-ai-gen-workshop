@@ -36,6 +36,15 @@ func NewInMemoryStore() *InMemoryStore {
 	}
 }
 
+
+// These methods on the InMemoryStore struct that implements the 
+// DuckStore interface from our api.
+// 
+// Why not declare the interface here?
+// From: https://go.dev/doc/effective_go#interfaces
+// > Interfaces in Go provide a way to specify the behavior of an object: if something can do this, then it can be used *here*
+// The server.go file needs a DuckStore and anything that satisfies that DuckStore interface can be used by the server
+
 func (i *InMemoryStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) {
 	i.mu.RLock()
 	defer i.mu.RUnlock()

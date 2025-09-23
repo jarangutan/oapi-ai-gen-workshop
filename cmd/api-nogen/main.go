@@ -2,11 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"flag"
 	"fmt"
-	"log/slog"
 	"net/http"
-	"time"
 )
 
 // Duck - https://go.dev/wiki/Well-known-struct-tags
@@ -19,10 +16,6 @@ type Duck struct {
 
 // This is a small Demo of what it would look like to build the API without codegen
 func main() {
-	var port int
-	flag.IntVar(&port, "port", 8080, "Port for test HTTP server")
-	flag.Parse()
-
 	// A Mux is an HTTP Multiplexer.
 	// It matches the URL of each incoming request against a list
 	// of registered patterns and calls the handler for the pattern
@@ -35,7 +28,8 @@ func main() {
 		// Set the content type so our caller knows what we are responding with
 		w.Header().Set("Content-Type", "application/json")
 		// Return a JSON response back
-		json.NewEncoder(w).Encode(Duck{
+		encoder := json.NewEncoder(w)
+		encoder.Encode(Duck{
 			ID:    1,
 			Name:  "Donna",
 			Color: "pink",
@@ -46,19 +40,14 @@ func main() {
 	// This is the actual HTTP server that will handle traffic on the
 	// port we set using the handlers we made
 	server := &http.Server{
-		Addr:    fmt.Sprintf(":%d", port),
+		Addr:    ":8080",
 		Handler: mux,
-		// Recommended timeouts from
-		// https://blog.cloudflare.com/exposing-go-on-the-internet/
-		ReadTimeout:  5 * time.Second,
-		WriteTimeout: 10 * time.Second,
-		IdleTimeout:  120 * time.Second,
 	}
 
-	slog.Info(fmt.Sprintf("Server listening on :%d", port))
+	fmt.Println("listening on http://localhost:8080")
 
 	// Start up the server
 	if err := server.ListenAndServe(); err != nil {
-		slog.Error("Server failed to start", "error", err)
+		panic(fmt.Sprintf("http server error: %s", err))
 	}
 }

@@ -66,10 +66,12 @@ func main() {
 	log.Println("Graceful shutdown complete.")
 }
 
-// gracefulShutdown listens for the a kill signal and an optional interrupt from the user
+// gracefulShutdown listens for the a kill signal and an optional interrupt from the user.
 // see https://victoriametrics.com/blog/go-graceful-shutdown/
 func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	// Create context that listens for the interrupt signal from the OS.
+	// This is done by catching those signals and instead of performing the default exit action,
+	// we send a Done to the context to let the server know to start shutting down.
 	ctx, stop := signal.NotifyContext(context.Background(), syscall.SIGINT, syscall.SIGTERM)
 	defer stop()
 
@@ -77,10 +79,12 @@ func gracefulShutdown(apiServer *http.Server, done chan bool) {
 	<-ctx.Done()
 
 	log.Println("shutting down gracefully, press Ctrl+C again to force")
-	stop() // Allow Ctrl+C to force shutdown
+	// Allow Ctrl+C to force shutdown by reseting the default behavior of those syscalls back to their original
+	// behavior i.e. exiting the program.
+	stop()
 
 	// The context is used to inform the server it has 5 seconds to finish
-	// the request it is currently handling
+	// the request it is currently handling.
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := apiServer.Shutdown(ctx); err != nil {

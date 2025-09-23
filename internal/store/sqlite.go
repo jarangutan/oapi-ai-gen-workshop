@@ -39,6 +39,7 @@ func (s *SQLLiteStore) Migrate() {
 	s.db.AutoMigrate(&RubberDuck{})
 }
 
+// GetDuck gets a single duck
 // Note! Even though this SQLLiteStore has an additional method "GetDuck", it still satisfies the DuckStore interface.
 // Creating interface where they are used allows loose coupling so you can add new methods without impacting current fucntionality
 func (s *SQLLiteStore) GetDuck(ctx context.Context, id uint) (api.RubberDuck, error) {

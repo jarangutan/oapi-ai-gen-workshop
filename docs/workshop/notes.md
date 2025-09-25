@@ -281,6 +281,12 @@ curl --request GET \
   --url http://localhost:8080/ducks
 ```
 
+Or
+
+```bash
+curl http://localhost:8080/ducks
+```
+
 ---
 
 ## Fancy tools to work with APIs

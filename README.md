@@ -16,3 +16,13 @@ cd oapi-ai-gen-workshop
 git checkout base
 go mod tidy
 ```
+
+## Run sample
+
+```bash
+go mod tidy
+
+## on Mac/Linux, you can use the make commands found in Makefile
+## make run
+go run cmd/api/main.go
+```

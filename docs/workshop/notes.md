@@ -349,11 +349,12 @@ There's also a version of this API that uses sqlite as a database with the same 
 
 ## But I want more
 
-- Read [Go's Standard Library](https://github.com/golang/go)
+- [Go's Standard Library](https://github.com/golang/go)
 - Read [Go's Blog](https://blog.golang.org/)
   - Specially on slices ([1](https://blog.golang.org/slices-intro), [2](ttps://blog.golang.org/slices)) and [strings](https://blog.golang.org/strings)
-- Read [Effective Go](https://go.dev/doc/effective_go)
-- Read [Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests/)
+- Take [Effective Go](https://go.dev/doc/effective_go)
+- [Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests/)
+- [Organize a Go module](https://go.dev/doc/modules/layout)
 - Read others Go code on Github
 
 ---

@@ -2,6 +2,8 @@
 
 Want to keep playing with the project after the workshop?
 
+The advanced examples below are on the `main` branch.
+
 ## More Go
 
 - [Go by Example](https://gobyexample.com/)

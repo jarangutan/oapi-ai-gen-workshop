@@ -54,13 +54,9 @@ func (s *Server) GetDucks(ctx context.Context, _ GetDucksRequestObject) (GetDuck
 
 // CreateDuck stores and returns a new duck.
 func (s *Server) CreateDuck(ctx context.Context, request CreateDuckRequestObject) (CreateDuckResponseObject, error) {
-	duck, err := s.duckStore.CreateDuck(ctx, *request.Body)
-	if err != nil {
-		return CreateDuck500JSONResponse{
-			Code:    http.StatusInternalServerError,
-			Message: "Unable to store duck.",
-		}, nil
-	}
-
-	return CreateDuck201JSONResponse(duck), nil
+	// Your turn :-)
+	// 1. Call s.duckStore.CreateDuck with ctx and *request.Body.
+	// 2. If the store returns an error, return CreateDuck500JSONResponse.
+	// 3. Else, return the new duck in CreateDuck201JSONResponse.
+	return nil, nil
 }

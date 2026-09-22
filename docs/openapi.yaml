@@ -4,10 +4,15 @@ info:
   version: 1.0.0
   description: An API for storing and retrieving Rubber Ducks.
 servers:
-  - url: https://localhost:8080
+  - url: http://localhost:8080
+tags:
+  - name: ducks
+    description: Store and retrieve Rubber Ducks.
 paths:
   /ducks:
     get:
+      tags:
+        - ducks
       summary: Retrieve all Rubber Ducks
       operationId: getDucks
       responses:
@@ -16,21 +21,20 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/RubberDuck"
+                $ref: "#/components/schemas/DucksResponse"
               examples:
                 success:
                   summary: Example response
                   value:
-                    - id: 1
-                      name: Classic Yellow
-                      color: yellow
-                      size: medium
-                    - id: 2
-                      name: Pirate Duck
-                      color: black
-                      size: large
+                    ducks:
+                      - id: 1
+                        name: Classic Yellow
+                        color: yellow
+                        size: medium
+                      - id: 2
+                        name: Pirate Duck
+                        color: mauve
+                        size: large
         "500":
           description: Internal server error.
           content:
@@ -43,6 +47,8 @@ paths:
                     code: 500
                     message: Unable to retrieve ducks.
     post:
+      tags:
+        - ducks
       summary: Store a new Rubber Duck
       operationId: createDuck
       requestBody:
@@ -50,7 +56,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/NewRubberDuck"
+              $ref: "#/components/schemas/DuckRequest"
             examples:
               newDuck:
                 summary: Example request
@@ -120,7 +126,7 @@ components:
         - name
         - color
         - size
-    NewRubberDuck:
+    DuckRequest:
       type: object
       properties:
         name:
@@ -137,6 +143,15 @@ components:
         - name
         - color
         - size
+    DucksResponse:
+      type: object
+      properties:
+        ducks:
+          type: array
+          items:
+            $ref: "#/components/schemas/RubberDuck"
+      required:
+        - ducks
     Error:
       type: object
       properties:

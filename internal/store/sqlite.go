@@ -8,8 +8,8 @@ import (
 	"gorm.io/gorm"
 )
 
-// RubberDuck here is our database model which looks very similar to our API model
-// That's usually not the case :-)
+// RubberDuck is our database model. It looks a lot like the API model here,
+// but that usually doesn't stay true for long :-)
 type RubberDuck struct {
 	gorm.Model
 	Name  string `gorm:"not null"`
@@ -17,76 +17,75 @@ type RubberDuck struct {
 	Size  string `gorm:"not null"`
 }
 
-// SQLLiteStore implements DuckStore inteface for a sqllite3 database using GORM
-// ORMs or Object Relationship Mappers are a tricky subject in Go. They can be super helpful or extremely painful!
-// They're particularly notorious for obfuscating a lot of the database away with magic. For our example, that's fine.
+// SQLiteStore implements api.DuckStore for a SQLite database using GORM.
+// ORMs are a tricky subject in Go. They can be super helpful or extremely painful!
+// GORM hides a lot of database details behind some magic, which is fine for this example.
 //
-// I tend to prefer something like [sqlc](https://github.com/sqlc-dev/sqlc) for simple
-// or [sqlBoiler](https://github.com/aarondl/sqlboiler) for more complex as these generate code and types from a SQL schema
-// similar to how we are doing with oapi-codegen for our API.
-type SQLLiteStore struct {
+// I tend to prefer something like sqlc for simple projects:
+// https://github.com/sqlc-dev/sqlc
+// Or SQLBoiler when I need more:
+// https://github.com/aarondl/sqlboiler
+// Both generate Go code from a database schema, much like oapi-codegen does for our API.
+type SQLiteStore struct {
 	db *gorm.DB
 }
 
-func NewSQLiteStore(db *gorm.DB) *SQLLiteStore {
-	return &SQLLiteStore{
-		db: db,
-	}
+// NewSQLiteStore gives us a SQLite store using db.
+func NewSQLiteStore(db *gorm.DB) *SQLiteStore {
+	return &SQLiteStore{db: db}
 }
 
-func (s *SQLLiteStore) Migrate() {
-	// Migrate the schema
-	s.db.AutoMigrate(&RubberDuck{})
+// Migrate creates or updates the ducks table.
+func (s *SQLiteStore) Migrate() error {
+	return s.db.AutoMigrate(&RubberDuck{})
 }
 
-// GetDuck gets a single duck
-// Note! Even though this SQLLiteStore has an additional method "GetDuck", it still satisfies the DuckStore interface.
-// Creating interface where they are used allows loose coupling so you can add new methods without impacting current fucntionality
-func (s *SQLLiteStore) GetDuck(ctx context.Context, id uint) (api.RubberDuck, error) {
+// Duck gets a single duck.
+// NOTE! Duck isn't part of api.DuckStore, but SQLiteStore still implements that
+// interface. Interfaces let us add methods here without changing Server.
+func (s *SQLiteStore) Duck(ctx context.Context, id uint) (api.RubberDuck, error) {
 	duck, err := gorm.G[RubberDuck](s.db).Where("id = ?", id).First(ctx)
 	if err != nil {
 		return api.RubberDuck{}, err
 	}
 
-	return api.RubberDuck{
-		Id:    int(duck.ID),
+	return toAPIDuck(duck), nil
+}
+
+// ListDucks returns every stored duck.
+func (s *SQLiteStore) ListDucks(ctx context.Context) ([]api.RubberDuck, error) {
+	stored, err := gorm.G[RubberDuck](s.db).Find(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	ducks := make([]api.RubberDuck, 0, len(stored))
+	for _, duck := range stored {
+		ducks = append(ducks, toAPIDuck(duck))
+	}
+	return ducks, nil
+}
+
+// CreateDuck stores and returns a new duck.
+func (s *SQLiteStore) CreateDuck(ctx context.Context, duck api.DuckRequest) (api.RubberDuck, error) {
+	stored := RubberDuck{
 		Name:  duck.Name,
 		Color: duck.Color,
-		Size:  api.RubberDuckSize(duck.Size),
-	}, nil
-}
-
-func (s *SQLLiteStore) GetDucks(ctx context.Context) ([]api.RubberDuck, error) {
-	ducks, err := gorm.G[RubberDuck](s.db).Find(ctx)
-	if err != nil {
-		return []api.RubberDuck{}, err
+		Size:  string(duck.Size),
 	}
-
-	d := make([]api.RubberDuck, 0, len(ducks))
-	for _, duck := range ducks {
-		d = append(d, api.RubberDuck{
-			Id:    int(duck.ID),
-			Name:  duck.Name,
-			Color: duck.Color,
-			Size:  api.RubberDuckSize(duck.Size),
-		})
-	}
-
-	return d, nil
-}
-
-func (s *SQLLiteStore) CreateDuck(ctx context.Context, duck api.NewRubberDuck) (api.RubberDuck, error) {
-	rb := RubberDuck{Name: duck.Name, Color: duck.Color, Size: string(duck.Size)}
-	result := gorm.WithResult()
-	err := gorm.G[RubberDuck](s.db, result).Create(ctx, &rb)
-	if err != nil {
+	if err := gorm.G[RubberDuck](s.db).Create(ctx, &stored); err != nil {
 		return api.RubberDuck{}, err
 	}
 
+	return toAPIDuck(stored), nil
+}
+
+// toAPIDuck is the small bit of copying that keeps our database and API types separate.
+func toAPIDuck(duck RubberDuck) api.RubberDuck {
 	return api.RubberDuck{
-		Id:    int(rb.ID),
-		Color: rb.Color,
-		Name:  rb.Name,
-		Size:  api.RubberDuckSize(rb.Size),
-	}, nil
+		ID:    int(duck.ID),
+		Name:  duck.Name,
+		Color: duck.Color,
+		Size:  api.RubberDuckSize(duck.Size),
+	}
 }

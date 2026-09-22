@@ -9,7 +9,7 @@ import "fmt"
 func main() {
 	// Variables
 	var hello string
-	fmt.Println("var", hello) // "" which is the zeroed value of sting
+	fmt.Println("var", hello) // "" which is the zero value of string
 	// var hello = "world"
 
 	myNum := 13
@@ -50,7 +50,8 @@ func main() {
 	}
 
 	// arrays
-	// - can't change their length unless you copy them to a bigger array
+	// - arrays have a fixed length
+	// - copying the values into a larger array gives you a new array
 	b := [5]int{1, 2, 3, 4, 5}
 	c := [...]int{1, 2, 3} // "..." lets the compiler figure out the length
 
@@ -58,8 +59,8 @@ func main() {
 
 	// slices
 	// - https://go.dev/blog/slices-intro and https://go.dev/doc/effective_go#slices
-	// - slices point to an underlying array
-	// - two slices can point to the same array
+	// - a slice describes part of an underlying array and tracks its length and capacity
+	// - two slices can share the same underlying array
 	var mySlice []int
 	mySlice = append(mySlice, 1)
 	fmt.Println(mySlice[0]) // 1
@@ -68,8 +69,9 @@ func main() {
 	fmt.Println(mySlice2[0]) // 1
 
 	// makes a slice of length 5 with an underlying array capacity of 10
-	// - the underlying array can be bigger than the slice because the slice is just a pointer to a view of the array
-	// - if appending to a slice exceeds capacity, the slice is copied to another slice with double the capacity
+	// - the underlying array can have more room than the slice currently uses
+	// - if append runs out of capacity, Go allocates another array and copies the values over
+	// - always assign append's result back because it may use a new underlying array
 	mySlice3 := make([]int, 5, 10)
 	fmt.Println(mySlice3) // [0 0 0 0 0]
 	mySlice3 = append(mySlice3, 1, 2, 3, 4, 5, 6)
@@ -103,8 +105,9 @@ func main() {
 // Plus takes a and b and returns the sum
 // Adding comments above things turns the comment into documentation. see https://tip.golang.org/doc/comment
 //
-// Capitalizing the first letter makes this public so other packages can use Plus
-// NOTE! You can't export anything from package main so move Plus to a different package if you want to export it
+// Capitalizing the first letter exports Plus
+// NOTE! package main can't be imported, so move Plus to another package
+// if you want to use it elsewhere
 func Plus(a, b int) int {
 	return a + b
 }

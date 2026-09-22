@@ -1,4 +1,4 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/v2.8.0/configuration-schema.json
 #
 # https://github.com/oapi-codegen/oapi-codegen
 # This file holds our configuration to have oapi-codegen create our types
@@ -9,4 +9,5 @@ generate:
   models: true
 output-options:
   skip-prune: true
+  name-normalizer: ToCamelCaseWithInitialisms
 output: ../types.gen.go

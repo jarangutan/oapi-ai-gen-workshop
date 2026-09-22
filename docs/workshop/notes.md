@@ -17,7 +17,7 @@ style: |
 ---
 
 <!--
-footer: ShellHacks 2025
+footer: ShellHacks 2026
 -->
 
 # Building an API in Go using Copilot and Code Gen
@@ -71,9 +71,9 @@ _backgroundRepeat: no-repeat;
 - If no time, have students follow. Main has finished code
 -->
 
-- Go 1.24+ (<https://go.dev/doc/install>)
+- Go 1.26+ (<https://go.dev/doc/install>)
 - git (<https://git-scm.com/downloads>)
-- this repo (<https://qrco.de/shgows>)
+- this repo
 - and your favorite IDE
 
 That's it! You can build a lot with just Go
@@ -85,7 +85,7 @@ That's it! You can build a lot with just Go
 - Use OpenAI to build us an OpenAPI spec
 - Use Code Generation with our spec to build us an API
 - Learn some Go to code up API request handlers
-- Build us a database
+- Use an in-memory store
 - Run our API
 
 You'll be coding so get your IDE open!
@@ -241,6 +241,10 @@ go mod tidy
 ## run all generators in the go module
 go generate ./...
 
+## get anything needed by our new generated code, then check the build
+go mod tidy
+go build ./...
+
 ## On Linux/Mac, Makefile has a handy shortcut
 make gen
 ```
@@ -341,7 +345,7 @@ go run cmd/api/main.go
 
 # What's next?
 
-Checkout the code in the main repo! There are tons of notes explaining extra bits and pieces of the code
+Check out the code on the main branch and [Going further](../going-further.md) for the extra bits and pieces.
 
 There's also a version of this API that uses sqlite as a database with the same server we just built
 
@@ -351,7 +355,7 @@ There's also a version of this API that uses sqlite as a database with the same 
 
 - [Go's Standard Library](https://github.com/golang/go)
 - Read [Go's Blog](https://blog.golang.org/)
-  - Specially on slices ([1](https://blog.golang.org/slices-intro), [2](ttps://blog.golang.org/slices)) and [strings](https://blog.golang.org/strings)
+  - Especially on slices ([1](https://blog.golang.org/slices-intro), [2](https://blog.golang.org/slices)) and [strings](https://blog.golang.org/strings)
 - Take [Effective Go](https://go.dev/doc/effective_go)
 - [Learn Go with tests](https://quii.gitbook.io/learn-go-with-tests/)
 - [Organize a Go module](https://go.dev/doc/modules/layout)

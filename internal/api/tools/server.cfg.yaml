@@ -1,13 +1,13 @@
-# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/HEAD/configuration-schema.json
+# yaml-language-server: $schema=https://raw.githubusercontent.com/oapi-codegen/oapi-codegen/v2.8.0/configuration-schema.json
 #
 # https://github.com/oapi-codegen/oapi-codegen
 # This file holds our configuration to have oapi-codegen create our server
 package: api
 generate:
-  chi-server: true
+  std-http-server: true
   embedded-spec: true
   strict-server: true
   # models: true
-compatibility:
-  apply-chi-middleware-first-to-last: true
+output-options:
+  name-normalizer: ToCamelCaseWithInitialisms
 output: ../server.gen.go

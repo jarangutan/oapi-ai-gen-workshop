@@ -14,6 +14,10 @@ type Duck struct {
 	Size  string `json:"size"`
 }
 
+type DucksResponse struct {
+	Ducks []Duck `json:"ducks"`
+}
+
 // This is a small Demo of what it would look like to build the API without codegen
 func main() {
 	// A Mux is an HTTP Multiplexer.
@@ -23,17 +27,19 @@ func main() {
 	// See: https://pkg.go.dev/net/http#ServeMux
 	mux := http.NewServeMux()
 
-	// We create a handler that will be called when someone calls GET /duck
-	mux.HandleFunc("GET /duck", func(w http.ResponseWriter, r *http.Request) {
+	// We create a handler that will be called when someone calls GET /ducks
+	mux.HandleFunc("GET /ducks", func(w http.ResponseWriter, r *http.Request) {
 		// Set the content type so our caller knows what we are responding with
 		w.Header().Set("Content-Type", "application/json")
 		// Return a JSON response back
 		encoder := json.NewEncoder(w)
-		encoder.Encode(Duck{
-			ID:    1,
-			Name:  "Donna",
-			Color: "pink",
-			Size:  "medium",
+		encoder.Encode(DucksResponse{
+			Ducks: []Duck{{
+				ID:    1,
+				Name:  "Donna",
+				Color: "pink",
+				Size:  "medium",
+			}},
 		})
 	})
 

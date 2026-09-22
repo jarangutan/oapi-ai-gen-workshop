@@ -5,7 +5,7 @@ all: build test
 
 build:
 	@echo "Building..."
-	@CGO_ENABLED=1 GOOS=linux go build -o main cmd/api/main.go
+	@go build -o main ./cmd/api
 
 # Run the application
 run:
@@ -24,7 +24,7 @@ clean:
 # Run generators
 gen:
 	@echo "Generating"
-	@go generate ./... 
+	@go generate ./...
 
 # Live Reload
 watch:
@@ -49,4 +49,4 @@ watch:
 presi-watch:
 	@npx @marp-team/marp-cli@latest --html --allow-local-files --template bespoke -w docs/workshop/notes.md
 
-.PHONY: all build run test clean watch presi-watch
+.PHONY: all build run test clean gen watch presi-watch

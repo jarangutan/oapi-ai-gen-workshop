@@ -9,34 +9,31 @@ import (
 	middleware "github.com/oapi-codegen/nethttp-middleware"
 )
 
-// withSwaggerValidate will prevent bad requests that don't conform to our OpenAPI schema
-// from hitting our handlers
-func withSwaggerValidate() func(http.Handler) http.Handler {
-	swagger, err := GetSwagger()
+// This file is a freebie! We'll walk through it together
+
+// withOpenAPIValidation prevents requests that don't match our OpenAPI spec
+// from hitting our handlers.
+// Middleware pattern: https://www.alexedwards.net/blog/making-and-using-middleware
+func withOpenAPIValidation() func(http.Handler) http.Handler {
+	spec, err := GetSpec()
 	if err != nil {
-		// This should never error
-		panic("there was an error getting the swagger")
+		panic(fmt.Errorf("load OpenAPI spec: %w", err))
 	}
 
-	// Clear out the servers array in the swagger spec. It is recommended to do this so that it skips validating
-	// that server names match.
-	swagger.Servers = nil
+	// Clear out the servers array so the validator doesn't require requests to use
+	// the exact server URL from our spec. Tests and deployments may use another host.
+	spec.Servers = nil
 
-	// Registering our own ErrorHandler to conform to our Error schema
-	f := middleware.OapiRequestValidatorWithOptions(swagger, &middleware.Options{
-		ErrorHandlerWithOpts: func(ctx context.Context, err error, w http.ResponseWriter, r *http.Request, opts middleware.ErrorHandlerOpts) {
+	return middleware.OapiRequestValidatorWithOptions(spec, &middleware.Options{
+		// Register our own ErrorHandler so validation errors match our Error schema.
+		ErrorHandlerWithOpts: func(_ context.Context, err error, w http.ResponseWriter, _ *http.Request, opts middleware.ErrorHandlerOpts) {
+			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(opts.StatusCode)
 			// Encode can fail but we control what is encoded so ignoring the error :-)
-			_ = json.NewEncoder(w).Encode(
-				Error{
-					Code:    400,
-					Message: fmt.Sprint("bad request:", err.Error()),
-				},
-			)
+			_ = json.NewEncoder(w).Encode(Error{
+				Code:    opts.StatusCode,
+				Message: fmt.Sprintf("bad request: %s", err),
+			})
 		},
 	})
-	// Middleware pattern: https://www.alexedwards.net/blog/making-and-using-middleware
-	return func(next http.Handler) http.Handler {
-		return f(next)
-	}
 }
